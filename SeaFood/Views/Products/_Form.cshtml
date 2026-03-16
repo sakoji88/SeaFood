@@ -1,16 +1,26 @@
 @model ProductCreateEditViewModel
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="mb-2"><label asp-for="Name" class="form-label">Название</label><input asp-for="Name" maxlength="200" class="form-control"/><span asp-validation-for="Name" class="text-danger"></span></div>
-<div class="mb-2"><label asp-for="Description" class="form-label">Описание</label><textarea asp-for="Description" maxlength="2000" class="form-control"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+<div class="mb-2">
+    <label asp-for="Name" class="form-label">Название</label>
+    <input asp-for="Name" maxlength="200" class="form-control"/>
+    <small class="text-muted">Пример: Филе лосося охлажденное.</small>
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-2">
+    <label asp-for="Description" class="form-label">Описание</label>
+    <textarea asp-for="Description" maxlength="2000" class="form-control"></textarea>
+    <small class="text-muted">Кратко опишите вкус, происхождение и особенности.</small>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
 <div class="row g-2">
-<div class="col-md-6 mb-2"><label asp-for="Price" class="form-label">Цена</label><input asp-for="Price" type="number" min="0" step="0.01" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="StockKg" class="form-label">Остаток (кг)</label><input asp-for="StockKg" type="number" min="0" step="0.01" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="UnitType" class="form-label">Единица</label><input asp-for="UnitType" maxlength="30" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="Origin" class="form-label">Страна происхождения</label><input asp-for="Origin" maxlength="100" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="StorageTemperature" class="form-label">Температура хранения</label><input asp-for="StorageTemperature" maxlength="50" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="ShelfLifeDays" class="form-label">Срок хранения (дней)</label><input asp-for="ShelfLifeDays" type="number" min="0" class="form-control"/></div>
-<div class="col-md-6 mb-2"><label asp-for="CategoryId" class="form-label">Категория</label><select asp-for="CategoryId" asp-items="Model.Categories" class="form-select"></select></div>
-<div class="col-md-6 mb-2"><label asp-for="SupplierId" class="form-label">Поставщик</label><select asp-for="SupplierId" asp-items="Model.Suppliers" class="form-select"></select></div>
-<div class="col-md-12 mb-2"><label asp-for="MainImageUrl" class="form-label">Главное изображение (URL)</label><input asp-for="MainImageUrl" maxlength="500" class="form-control"/></div>
-<div class="col-md-12 mb-2 form-check"><input asp-for="IsActive" class="form-check-input"/><label asp-for="IsActive" class="form-check-label">Активен</label></div>
+<div class="col-md-6 mb-2"><label asp-for="Price" class="form-label">Цена</label><input asp-for="Price" type="number" min="0" step="0.01" class="form-control"/><small class="text-muted">Пример: 1290.50</small><span asp-validation-for="Price" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="StockKg" class="form-label">Остаток (кг)</label><input asp-for="StockKg" type="number" min="0" step="0.01" class="form-control"/><small class="text-muted">Пример: 25.5</small><span asp-validation-for="StockKg" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="UnitType" class="form-label">Единица</label><input asp-for="UnitType" maxlength="30" class="form-control"/><small class="text-muted">Пример: кг</small><span asp-validation-for="UnitType" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="Origin" class="form-label">Страна происхождения</label><input asp-for="Origin" maxlength="100" class="form-control"/><small class="text-muted">Пример: Норвегия</small><span asp-validation-for="Origin" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="StorageTemperature" class="form-label">Температура хранения</label><input asp-for="StorageTemperature" maxlength="50" class="form-control"/><small class="text-muted">Пример: от -2 до +2°C</small><span asp-validation-for="StorageTemperature" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="ShelfLifeDays" class="form-label">Срок хранения (дней)</label><input asp-for="ShelfLifeDays" type="number" min="0" class="form-control"/><small class="text-muted">Пример: 10</small><span asp-validation-for="ShelfLifeDays" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="CategoryId" class="form-label">Категория</label><select asp-for="CategoryId" asp-items="Model.Categories" class="form-select"></select><span asp-validation-for="CategoryId" class="text-danger"></span></div>
+<div class="col-md-6 mb-2"><label asp-for="SupplierId" class="form-label">Поставщик</label><select asp-for="SupplierId" asp-items="Model.Suppliers" class="form-select"></select><span asp-validation-for="SupplierId" class="text-danger"></span></div>
+<div class="col-md-12 mb-2"><label asp-for="MainImageUrl" class="form-label">Главное изображение (URL)</label><input asp-for="MainImageUrl" maxlength="500" class="form-control"/><small class="text-muted">Пример: https://site.com/image.jpg</small><span asp-validation-for="MainImageUrl" class="text-danger"></span></div>
+<div class="col-md-12 mb-2 form-check"><input asp-for="IsActive" class="form-check-input"/><label asp-for="IsActive" class="form-check-label">Активен</label><span asp-validation-for="IsActive" class="text-danger d-block"></span></div>
 </div>

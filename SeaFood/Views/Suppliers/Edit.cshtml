@@ -1,4 +1,31 @@
 @model SupplierCreateEditViewModel
 <h2>Изменить поставщика</h2>
-<form method="post" class="card p-3">@Html.AntiForgeryToken()<input type="hidden" asp-for="Id"/><div asp-validation-summary="ModelOnly" class="text-danger"></div><div class="mb-2"><label asp-for="Name" class="form-label">Название</label><input asp-for="Name" maxlength="150" class="form-control"/><span asp-validation-for="Name" class="text-danger"></span></div><div class="mb-2"><label asp-for="Country" class="form-label">Страна</label><input asp-for="Country" maxlength="100" class="form-control"/><span asp-validation-for="Country" class="text-danger"></span></div><div class="mb-2"><label asp-for="ContactPhone" class="form-label">Телефон</label><input asp-for="ContactPhone" maxlength="30" class="form-control"/><span asp-validation-for="ContactPhone" class="text-danger"></span></div><button class="btn btn-accent">Сохранить</button></form>
+<form method="post" class="card p-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id"/>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Название</label>
+        <input asp-for="Name" maxlength="150" class="form-control"/>
+        <small class="text-muted">Пример: Arctic Sea Export.</small>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Country" class="form-label">Страна</label>
+        <input asp-for="Country" maxlength="100" class="form-control"/>
+        <small class="text-muted">Пример: Япония.</small>
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ContactPhone" class="form-label">Телефон</label>
+        <input asp-for="ContactPhone" maxlength="30" class="form-control"/>
+        <small class="text-muted">Пример: +81 000 000 000.</small>
+        <span asp-validation-for="ContactPhone" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-accent">Сохранить</button>
+</form>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

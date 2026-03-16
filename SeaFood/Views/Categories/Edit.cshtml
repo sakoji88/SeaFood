@@ -1,5 +1,25 @@
 @model CategoryCreateEditViewModel
 @{ ViewData["Title"] = "Изменить категорию"; }
 <h2>Изменить категорию</h2>
-<form method="post" class="card p-3">@Html.AntiForgeryToken()<input type="hidden" asp-for="Id"/><div asp-validation-summary="ModelOnly" class="text-danger"></div><div class="mb-2"><label asp-for="Name" class="form-label">Название</label><input asp-for="Name" maxlength="100" class="form-control"/><span asp-validation-for="Name" class="text-danger"></span></div><div class="mb-2"><label asp-for="Description" class="form-label">Описание</label><textarea asp-for="Description" maxlength="500" class="form-control"></textarea></div><button class="btn btn-accent">Сохранить</button></form>
+<form method="post" class="card p-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id"/>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Название</label>
+        <input asp-for="Name" maxlength="100" class="form-control"/>
+        <small class="text-muted">Пример: Морские деликатесы.</small>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Описание</label>
+        <textarea asp-for="Description" maxlength="500" class="form-control"></textarea>
+        <small class="text-muted">Необязательно.</small>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-accent">Сохранить</button>
+</form>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }

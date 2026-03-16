@@ -1,0 +1,8 @@
+@model IEnumerable<UserManagementViewModel>
+<h2>Управление пользователями</h2>
+<table class="table table-hover"><thead><tr><th>ФИО</th><th>Email</th><th>Телефон</th><th>Роль</th><th>Дата регистрации</th><th>Статус</th><th></th></tr></thead><tbody>
+@foreach(var u in Model){<tr><td>@u.FullName</td><td>@u.Email</td><td>@u.Phone</td><td>@u.RoleName</td><td>@u.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td><td>@(u.IsActive?"Активен":"Заблокирован")</td><td class="d-flex gap-1">
+@if (u.IsActive){<form method="post" asp-action="BlockUser">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@u.Id"/><button class="btn btn-sm btn-outline-danger">Заблокировать</button></form>} else {<form method="post" asp-action="UnblockUser">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@u.Id"/><button class="btn btn-sm btn-outline-success">Разблокировать</button></form>}
+<form method="post" asp-action="PromoteToAdmin">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@u.Id"/><button class="btn btn-sm btn-outline-primary">Сделать админом</button></form>
+</td></tr>}
+</tbody></table>

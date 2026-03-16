@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using SeaFood.Data;
 using SeaFood.Helpers;
 using SeaFood.Models;
+using SeaFood.Services;
 using SeaFood.ViewModels;
 
 namespace SeaFood.Controllers;
 
-public class ProductsController(AppDbContext db) : Controller
+public class ProductsController(AppDbContext db, ISessionCartService cartService) : Controller
 {
     public async Task<IActionResult> Index(ProductFilterViewModel filter)
     {
@@ -65,14 +66,14 @@ public class ProductsController(AppDbContext db) : Controller
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (product is null) return NotFound();
+
+        product.Reviews = product.Reviews.Where(x => !ReviewModerationHelper.IsPending(x.Comment)).ToList();
+        ViewBag.CanReview = User.Identity?.IsAuthenticated == true && cartService.HasPurchasedProduct(id);
         return View(product);
     }
 
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Create()
-    {
-        return View(await BuildProductVmAsync(new ProductCreateEditViewModel()));
-    }
+    public async Task<IActionResult> Create() => View(await BuildProductVmAsync(new ProductCreateEditViewModel()));
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
@@ -103,7 +104,6 @@ public class ProductsController(AppDbContext db) : Controller
 
         if (!string.IsNullOrWhiteSpace(model.MainImageUrl))
         {
-            // Главное изображение товара хранится в связанной таблице ProductImages.
             db.ProductImages.Add(new ProductImage { ProductId = product.Id, ImageUrl = StringSanitizer.Clean(model.MainImageUrl, 500), IsMain = true });
             await db.SaveChangesAsync();
         }
@@ -165,18 +165,9 @@ public class ProductsController(AppDbContext db) : Controller
         var mainImage = product.ProductImages.FirstOrDefault(x => x.IsMain);
         var cleanedUrl = StringSanitizer.Clean(model.MainImageUrl, 500);
 
-        if (string.IsNullOrWhiteSpace(cleanedUrl) && mainImage is not null)
-        {
-            db.ProductImages.Remove(mainImage);
-        }
-        else if (!string.IsNullOrWhiteSpace(cleanedUrl) && mainImage is null)
-        {
-            db.ProductImages.Add(new ProductImage { ProductId = product.Id, ImageUrl = cleanedUrl, IsMain = true });
-        }
-        else if (mainImage is not null)
-        {
-            mainImage.ImageUrl = cleanedUrl;
-        }
+        if (string.IsNullOrWhiteSpace(cleanedUrl) && mainImage is not null) db.ProductImages.Remove(mainImage);
+        else if (!string.IsNullOrWhiteSpace(cleanedUrl) && mainImage is null) db.ProductImages.Add(new ProductImage { ProductId = product.Id, ImageUrl = cleanedUrl, IsMain = true });
+        else if (mainImage is not null) mainImage.ImageUrl = cleanedUrl;
 
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));

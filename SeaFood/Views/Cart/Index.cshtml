@@ -1,0 +1,31 @@
+@model CartViewModel
+@{ ViewData["Title"] = "Демо-корзина"; }
+<h2>Демо-корзина</h2>
+@if (!Model.Items.Any())
+{
+    <div class="alert alert-info">Корзина пуста</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead><tr><th>Товар</th><th>Цена за кг</th><th>Кг</th><th>Сумма</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.PricePerKg.ToString("0.00") ₽</td>
+                <td>@item.QuantityKg</td>
+                <td>@item.LineTotal.ToString("0.00") ₽</td>
+                <td>
+                    <form method="post" asp-action="Remove">@Html.AntiForgeryToken()<input type="hidden" name="productId" value="@item.ProductId"/><button class="btn btn-sm btn-outline-danger">Удалить</button></form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-center">
+        <h4>Итого: @Model.Total.ToString("0.00") ₽</h4>
+        <form method="post" asp-action="Checkout">@Html.AntiForgeryToken()<button class="btn btn-accent btn-lg">Демо-оплата</button></form>
+    </div>
+}

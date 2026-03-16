@@ -1,5 +1,24 @@
+@using SeaFood.Helpers
 @model IEnumerable<Review>
 <h2>Отзывы</h2>
-<table class="table table-striped"><thead><tr><th>Товар</th><th>Пользователь</th><th>Оценка</th><th>Комментарий</th><th>Дата</th><th></th></tr></thead><tbody>
-@foreach(var r in Model){<tr><td>@r.Product?.Name</td><td>@r.User?.FullName</td><td>@r.Rating</td><td>@r.Comment</td><td>@r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td><td><form method="post" asp-controller="Reviews" asp-action="Delete">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@r.Id"/><input type="hidden" name="productId" value="@r.ProductId"/><button class="btn btn-sm btn-outline-danger">Удалить</button></form></td></tr>}
+<table class="table table-striped"><thead><tr><th>Товар</th><th>Пользователь</th><th>Оценка</th><th>Комментарий</th><th>Статус</th><th>Дата</th><th></th></tr></thead><tbody>
+@foreach(var r in Model)
+{
+    var pending = ReviewModerationHelper.IsPending(r.Comment);
+    <tr>
+        <td>@r.Product?.Name</td>
+        <td>@r.User?.FullName</td>
+        <td>@r.Rating</td>
+        <td>@ReviewModerationHelper.CleanForDisplay(r.Comment)</td>
+        <td>@(pending ? "Ожидает" : "Одобрен")</td>
+        <td>@r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td>
+        <td class="d-flex gap-1">
+            @if (pending)
+            {
+                <form method="post" asp-controller="Reviews" asp-action="Approve">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@r.Id"/><button class="btn btn-sm btn-outline-success">Одобрить</button></form>
+            }
+            <form method="post" asp-controller="Reviews" asp-action="Delete">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@r.Id"/><input type="hidden" name="productId" value="@r.ProductId"/><button class="btn btn-sm btn-outline-danger">Удалить</button></form>
+        </td>
+    </tr>
+}
 </tbody></table>

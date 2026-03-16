@@ -1,22 +1,55 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
+html, body {
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  background: linear-gradient(160deg, #f5fbff, #e9f4ff 35%, #eefbff 100%);
+  color: #0f2742;
+}
+
+.main-header {
+  background: linear-gradient(90deg, #0f2742, #155b8a);
+}
+
+.footer {
+  background: #0f2742;
+  color: #d7ecff;
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #00b4d8, #0096c7);
+  border: none;
+  color: #fff;
+  border-radius: 999px;
+  transition: .25s ease;
+}
+
+.btn-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0,150,199,.25);
+  color: #fff;
+}
+
+.landing-wrap {
+  min-height: calc(100vh - 180px);
+}
+
+.landing-card {
+  width: min(760px, 100%);
+  padding: 3rem 2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(15, 39, 66, 0.18);
+}
+
+.product-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15,39,66,.09);
+}
+
+.product-card img {
+  height: 190px;
+  object-fit: cover;
 }

@@ -1,0 +1,14 @@
+@{ ViewData["Title"] = "Админ-панель"; }
+<h2>Админ-панель</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card p-3"><h5>Товаров</h5><p class="display-6">@ViewBag.ProductsCount</p></div></div>
+    <div class="col-md-4"><div class="card p-3"><h5>Пользователей</h5><p class="display-6">@ViewBag.UsersCount</p></div></div>
+    <div class="col-md-4"><div class="card p-3"><h5>Отзывов</h5><p class="display-6">@ViewBag.ReviewsCount</p></div></div>
+</div>
+<div class="d-flex gap-2 flex-wrap">
+    <a class="btn btn-outline-primary" asp-controller="Products" asp-action="Index">Товары</a>
+    <a class="btn btn-outline-primary" asp-controller="Categories" asp-action="Index">Категории</a>
+    <a class="btn btn-outline-primary" asp-controller="Suppliers" asp-action="Index">Поставщики</a>
+    <a class="btn btn-outline-primary" asp-action="Users">Пользователи</a>
+    <a class="btn btn-outline-primary" asp-action="Reviews">Отзывы</a>
+</div>

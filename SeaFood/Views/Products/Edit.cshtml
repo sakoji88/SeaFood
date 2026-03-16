@@ -1,0 +1,10 @@
+@model ProductCreateEditViewModel
+@{ ViewData["Title"] = "Редактировать товар"; }
+<h2>Редактировать товар</h2>
+<form method="post" class="card p-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <partial name="_Form" model="Model" />
+    <button class="btn btn-accent">Сохранить</button>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

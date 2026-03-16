@@ -42,7 +42,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="ProductId" value="@Model.Id"/>
                 <label class="form-label">Сколько кг купить (демо)</label>
-                <input type="number" step="0.1" min="0.1" max="@Model.StockKg" name="QuantityKg" class="form-control mb-2" required />
+                <input type="number" step="0.5" min="0.5" max="@Model.StockKg" name="QuantityKg" class="form-control mb-2" required />
                 <button class="btn btn-accent">Добавить в корзину</button>
             </form>
         }

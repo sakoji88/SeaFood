@@ -32,9 +32,9 @@ public class SessionCartService(IHttpContextAccessor httpContextAccessor) : ISes
         }
         else
         {
-            var clamped = Math.Min(quantityKg, availableKg);
             if (existing is null)
             {
+                var clamped = Math.Min(quantityKg, availableKg);
                 cart.Items.Add(new CartItemViewModel
                 {
                     ProductId = productId,
@@ -46,7 +46,8 @@ public class SessionCartService(IHttpContextAccessor httpContextAccessor) : ISes
             }
             else
             {
-                existing.QuantityKg = clamped;
+                // Добавляем вес к уже выбранному товару, а не перезаписываем.
+                existing.QuantityKg = Math.Min(existing.QuantityKg + quantityKg, availableKg);
                 existing.AvailableKg = availableKg;
                 existing.PricePerKg = pricePerKg;
                 existing.ProductName = productName;

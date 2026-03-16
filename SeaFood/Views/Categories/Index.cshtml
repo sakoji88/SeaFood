@@ -1,0 +1,7 @@
+@model IEnumerable<Category>
+@{ ViewData["Title"] = "Категории"; }
+<h2>Категории</h2>
+<a asp-action="Create" class="btn btn-accent mb-3">Добавить категорию</a>
+<table class="table table-striped"><thead><tr><th>Название</th><th>Описание</th><th></th></tr></thead><tbody>
+@foreach(var c in Model){<tr><td>@c.Name</td><td>@c.Description</td><td><a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">Изменить</a> <a asp-action="Delete" asp-route-id="@c.Id" class="btn btn-sm btn-outline-danger">Удалить</a></td></tr>}
+</tbody></table>

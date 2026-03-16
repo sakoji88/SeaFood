@@ -1,0 +1,84 @@
+@model Product
+@{ 
+    ViewData["Title"] = Model.Name; 
+    var avg = Model.Reviews.Any() ? Model.Reviews.Average(x => x.Rating) : 0;
+    var canReview = (bool)(ViewBag.CanReview ?? false);
+}
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div id="carousel" class="carousel slide">
+            <div class="carousel-inner rounded-4 shadow-sm">
+                @if (Model.ProductImages.Any())
+                {
+                    @for (int i = 0; i < Model.ProductImages.Count; i++)
+                    {
+                        var image = Model.ProductImages.ElementAt(i);
+                        <div class="carousel-item @(i == 0 ? "active" : "")"><img src="@image.ImageUrl" class="d-block w-100" alt="@Model.Name" /></div>
+                    }
+                }
+                else
+                {
+                    <div class="carousel-item active"><img src="https://placehold.co/800x500/0f2742/ffffff?text=Kacer+Fish" class="d-block w-100" alt="Заглушка" /></div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2>@Model.Name</h2>
+        <p>@Model.Description</p>
+        <p><strong>Цена:</strong> @Model.Price.ToString("0.00") ₽</p>
+        <p><strong>Остаток:</strong> @Model.StockKg @Model.UnitType</p>
+        <p><strong>Страна:</strong> @Model.Origin</p>
+        <p><strong>Температура хранения:</strong> @Model.StorageTemperature</p>
+        <p><strong>Срок хранения:</strong> @Model.ShelfLifeDays дней</p>
+        <p><strong>Категория:</strong> @Model.Category?.Name</p>
+        <p><strong>Поставщик:</strong> @Model.Supplier?.Name</p>
+        <p><strong>Средняя оценка:</strong> @avg.ToString("0.0") / 5</p>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Cart" asp-action="Add" method="post" class="card p-3 mt-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ProductId" value="@Model.Id"/>
+                <label class="form-label">Сколько кг купить (демо)</label>
+                <input type="number" step="0.1" min="0.1" max="@Model.StockKg" name="QuantityKg" class="form-control mb-2" required />
+                <button class="btn btn-accent">Добавить в корзину</button>
+            </form>
+        }
+    </div>
+</div>
+
+<hr />
+<h4>Отзывы</h4>
+@foreach (var r in Model.Reviews.OrderByDescending(x => x.CreatedAt))
+{
+    <div class="card mb-2"><div class="card-body">
+        <div class="d-flex justify-content-between"><strong>@r.User?.FullName</strong><span>@r.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span></div>
+        <div>Оценка: @r.Rating / 5</div>
+        <p class="mb-0">@r.Comment</p>
+        @if (User.IsInRole("Admin"))
+        {
+            <form asp-controller="Reviews" asp-action="Delete" method="post" class="mt-2">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@r.Id" /><input type="hidden" name="productId" value="@Model.Id" /><button class="btn btn-sm btn-outline-danger">Удалить</button></form>
+        }
+    </div></div>
+}
+@if (User.Identity?.IsAuthenticated == true && canReview)
+{
+    <form asp-controller="Reviews" asp-action="Create" method="post" class="card p-3 mt-3">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ProductId" value="@Model.Id" />
+        <div class="mb-2"><label class="form-label">Оценка</label><input type="number" class="form-control" name="Rating" min="1" max="5" required /></div>
+        <div class="mb-2"><label class="form-label">Комментарий</label><textarea class="form-control" name="Comment" maxlength="1000" required></textarea></div>
+        <button class="btn btn-accent">Оставить отзыв</button>
+        <small class="text-muted mt-1">Отзыв появится после одобрения администратором.</small>
+    </form>
+}
+else if (User.Identity?.IsAuthenticated == true)
+{
+    <p class="mt-3">Оставить отзыв можно после покупки этого товара.</p>
+}
+else
+{
+    <p class="mt-3">Чтобы оставить отзыв, <a asp-controller="Account" asp-action="Login">войдите</a>.</p>
+}

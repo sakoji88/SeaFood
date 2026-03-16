@@ -1,32 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
-using SeaFood.Models;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using SeaFood.Data;
 
-namespace SeaFood.Controllers
+namespace SeaFood.Controllers;
+
+public class HomeController(AppDbContext db) : Controller
 {
-    public class HomeController : Controller
+    public async Task<IActionResult> Index()
     {
-        private readonly ILogger<HomeController> _logger;
+        var popularProducts = await db.Products
+            .Where(x => x.IsActive)
+            .Include(x => x.ProductImages)
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(4)
+            .ToListAsync();
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return View(popularProducts);
     }
+
+    public IActionResult Privacy() => View();
+
+    public IActionResult AccessDenied() => View();
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error() => View();
 }
